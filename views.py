@@ -1,7 +1,7 @@
 
 from django.shortcuts import render, HttpResponse, redirect
 from django.contrib.auth.hashers import make_password, check_password
-from .models import participants,organizer
+from .models import participants,organizer,gdg
 
 def HomePage(request):
     if 'user_id' not in request.session:
@@ -86,4 +86,23 @@ def contact(request):
     return render(request, "contact.html")
 
 def createeventform(request):
-    return render(request, 'createeventform.html')
+    if request.method == 'POST':
+        event_name = request.POST.get('event_name')
+        email = request.POST.get('email')
+        contactno = request.POST.get('contactno')
+        date = request.POST.get('date')
+        starttime = request.POST.get('starttime')
+        endtime = request.POST.get('endtime')
+        location = request.POST.get('location')
+        desc=request.POST.get('desc')
+        event_img=request.POST.get('event_img')
+        purpose=request.POST.get('Purpose_of_event')
+          
+        if gdg.objects.filter(event_name=event_name).exists():
+            return HttpResponse("event already exists! Try a different one.")
+        event = gdg.objects.create(event_name=event_name,location=location,date=date,starttime=starttime,endtime=endtime,desc=desc,purpose_of_even=purpose,event_img=event_img,conact=contactno)
+        event.save()
+       
+        return redirect('HomePage')  
+
+    return render(request, "createevent.html")
