@@ -1,0 +1,13 @@
+
+
+{% block content %}
+<h2>Register for Event: {{ event.event_name }}</h2>
+<p><strong>Location:</strong> {{ event.location }}</p>
+<p><strong>Date:</strong> {{ event.date }}</p>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Register</button>
+</form>
+{% endblock %}

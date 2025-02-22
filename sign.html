@@ -1,10 +1,9 @@
-<!-- login.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login</title>
+    <title>Sign Up</title>
     <style>
         * {
             margin: 0;
@@ -23,17 +22,16 @@
         .container {
             position: relative;
             width: 400px;
-            padding: 20px;
-            background: #081b29;
+            background: transparent;
             border: 2px solid #0ef;
-            box-shadow: 0px 0px 10px rgba(0, 238, 255, 0.5);
+            padding: 20px;
             border-radius: 8px;
-            color: white;
+            animation: fadeIn 1s ease-in-out;
         }
         h2 {
             text-align: center;
             margin-bottom: 20px;
-            color: #0ef;
+            color: #fff;
         }
         .form-group {
             margin-bottom: 15px;
@@ -42,7 +40,7 @@
             display: block;
             margin-bottom: 5px;
             font-weight: bold;
-            color: #0ef;
+            color: #fff;
         }
         .form-group input {
             width: 100%;
@@ -50,7 +48,7 @@
             border: 1px solid #0ef;
             border-radius: 5px;
             background: transparent;
-            color: white;
+            color: #fff;
         }
         .form-group input:focus {
             border-color: #0ef;
@@ -60,11 +58,10 @@
             padding: 10px;
             background: transparent;
             border: 2px solid #0ef;
-            outline: none;
             border-radius: 40px;
-            cursor: pointer;
             font-size: 16px;
-            color: #0ef;
+            cursor: pointer;
+            color: #fff;
             font-weight: 600;
             transition: background 0.5s ease;
         }
@@ -87,29 +84,47 @@
         li {
             color: red;
         }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
     </style>
 </head>
 <body>
-
     <div class="container">
-        <h2>Login</h2>
+        <h2>Sign Up</h2>
         <form method="post">
             {% csrf_token %}
-            
-            <!-- Username Field -->
             <div class="form-group">
-                <label for="id_username">Username</label>
-                {{ form.username }}
-                {% if form.username.errors %}
+                <label for="id_name">Name</label>
+                {{ form.name }}
+                {% if form.name.errors %}
                     <ul>
-                        {% for error in form.username.errors %}
+                        {% for error in form.name.errors %}
                             <li>{{ error }}</li>
                         {% endfor %}
                     </ul>
                 {% endif %}
             </div>
 
-            <!-- Password Field -->
+            <div class="form-group">
+                <label for="id_email">Email</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <ul>
+                        {% for error in form.email.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
             <div class="form-group">
                 <label for="id_password">Password</label>
                 {{ form.password }}
@@ -122,8 +137,19 @@
                 {% endif %}
             </div>
 
-            <!-- Submit Button -->
-            <button type="submit">Login</button>
+            <div class="form-group">
+                <label for="id_user_type">User Type</label>
+                {{ form.user_type }}
+                {% if form.user_type.errors %}
+                    <ul>
+                        {% for error in form.user_type.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+
+            <button type="submit">Sign Up</button>
         </form>
 
         {% if form.non_field_errors %}
@@ -135,8 +161,6 @@
                 </ul>
             </div>
         {% endif %}
-
     </div>
-
 </body>
 </html>

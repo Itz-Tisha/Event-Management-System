@@ -1,0 +1,139 @@
+<!-- event_form.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Event</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #081b29, #0c3b57);
+            margin: 0;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0px 0px 15px 0px rgba(0, 255, 238, 0.3);
+            width: 420px;
+            text-align: center;
+            backdrop-filter: blur(8px);
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #fff;
+            font-size: 22px;
+            font-weight: 600;
+        }
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        label {
+            display: flex;
+            align-items: center;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 5px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: none;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #fff;
+            outline: none;
+            transition: 0.3s ease-in-out;
+        }
+        input::placeholder, textarea::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        input:focus, textarea:focus {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        textarea {
+            height: 60px;
+            resize: none;
+        }
+        button {
+            background: #0ef;
+            color: #081b29;
+            padding: 12px;
+            border: none;
+            cursor: pointer;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            transition: background 0.3s ease-in-out, transform 0.2s;
+            width: 100%;
+        }
+        button:hover {
+            background: #fff;
+            color: #081b29;
+            transform: scale(1.05);
+        }
+        input, textarea {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Create Event</h2>
+        <form method="post">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="id_event_name">Event Name</label>
+                <input type="text" name="event_name" id="id_event_name" placeholder="Enter event name">
+            </div>
+
+            <div class="form-group">
+                <label for="id_location">Location</label>
+                {{ form.location }}
+            </div>
+
+            <div class="form-group">
+                <label for="id_start_time">Start Time</label>
+                {{ form.start_time }}
+            </div>
+
+            <div class="form-group">
+                <label for="id_end_time">End Time</label>
+                {{ form.end_time }}
+            </div>
+
+            <div class="form-group">
+                <label for="id_date">Date</label>
+                {{ form.date }}
+            </div>
+
+            <div class="form-group">
+                <label for="id_desc">Description</label>
+                {{ form.desc }}
+            </div>
+
+            <div class="form-group">
+                <label for="id_club_name">Club Name</label>
+                {{ form.club_name }}
+            </div>
+
+            <button type="submit">Create Event</button>
+        </form>
+    </div>
+
+</body>
+</html>
