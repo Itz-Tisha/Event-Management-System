@@ -1,14 +1,14 @@
-
-from django.urls import path, include
+# app/urls.py
+from django.urls import path
 from . import views
 
 urlpatterns = [
-   path("",views.SignupPage,name="SignupPage"),
-   path("login/",views.LoginPage,name="LoginPage"),
-   path("home/",views.HomePage,name="HomePage"),
-   path("logoutv/",views.logoutv,name="logoutv"),
-   path('about/',views.about,name='about'),
-    path('service/',views.service,name='service'),
-    path('contact/',views.contact,name='contact'),
-    path('createeventform/',views.createeventform,name="createeventform")
+    path('', views.sign_up, name='sign_up'),
+    path('login/',views.user_login,name='user_login'),
+    path('home/',views.home,name='home'),
+    path('create_club/', views.create_club, name='create_club'),
+    path('create_event/', views.create_event, name='create_event'),
+    path('register/<int:event_id>/', views.register_for_event, name='register_for_event'),
+   
+     
 ]
