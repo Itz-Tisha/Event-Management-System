@@ -1,7 +1,6 @@
 from django.contrib import admin
-from .models import participants
-from .models import organizer,gdg
-# Register your models here.
-admin.site.register(participants)
-admin.site.register(organizer)
-admin.site.register(gdg)
+from . models import UserType,club,event,event_reg
+admin.site.register(UserType)
+admin.site.register(club)
+admin.site.register(event)
+admin.site.register(event_reg)
