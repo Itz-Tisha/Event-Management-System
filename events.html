@@ -1,0 +1,103 @@
+<!-- 
+
+{% if events %}
+    {% for event in events %}
+        <div class="event-card">
+            <h2>{{ event.event_name }}</h2>
+            <p>{{ event.desc }}</p>
+        </div>
+       
+        <a href="{% url 'register_for_event' event.id %}">
+            <button type="button">Register</button>
+        </a>
+    
+    {% endfor %}
+{% else %}
+    <p>No events for this club.</p>
+{% endif %} -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            min-height: 100vh;
+            background: #081b29;
+            overflow: hidden;
+            padding: 20px;
+        }
+        .event-card {
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
+            background: #081b29;
+            border: 2px solid #0ef;
+            box-shadow: 0px 0px 10px rgba(0, 238, 255, 0.5);
+            border-radius: 8px;
+            color: white;
+            margin-bottom: 20px;
+        }
+        .event-card h2 {
+            color: #0ef;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .event-card p {
+            margin-bottom: 15px;
+            color: #ccc;
+        }
+        .event-card button {
+            width: 100%;
+            padding: 10px;
+            background: transparent;
+            border: 2px solid #0ef;
+            outline: none;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 16px;
+            color: #0ef;
+            font-weight: 600;
+            transition: background 0.5s ease;
+        }
+        .event-card button:hover {
+            background: #0ef;
+            color: #081b29;
+        }
+        .no-events {
+            text-align: center;
+            color: #fff;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+
+    {% if events %}
+        {% for event in events %}
+            <div class="event-card">
+                <h2>{{ event.event_name }}</h2>
+                <p>{{ event.desc }}</p>
+                <a href="{% url 'register_for_event' event.id %}">
+                    <button type="button">Register</button>
+                </a>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="no-events">No events for this club.</p>
+    {% endif %}
+
+</body>
+</html>
