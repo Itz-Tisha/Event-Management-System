@@ -40,10 +40,11 @@ def home(request):
     clubs = club.objects.all()
     events = event.objects.all() 
     is_org=False 
+    username = request.session.get('username','')
     print(request.session.get('user_type', ''))
     if request.session.get('user_type', '') == 'organizer':
         is_org=True
-    return render(request, 'home.html',{'events':events , 'is_org':is_org,'clubs':clubs})
+    return render(request, 'home.html',{'events':events , 'is_org':is_org,'clubs':clubs,'username':username})
 
 
 
@@ -138,3 +139,9 @@ def register_for_event(request, event_id):
         form = EventRegForm()
 
     return render(request, 'event_register.html', {'form': form, 'event': current_event})
+
+def club_events(request, clubname):
+   
+    events = event.objects.filter(club_name__clubname=clubname)
+    
+    return render(request, 'events.html', {'events': events})
