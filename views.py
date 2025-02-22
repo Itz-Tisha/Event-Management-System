@@ -1,108 +1,140 @@
+from django.shortcuts import render, HttpResponse, redirect,get_object_or_404
+from django.contrib import messages
+from .models import UserType,club,event
+from .forms import SignUpForm,LoginForm,ClubForm,eventform,EventRegForm
+from django . contrib.auth import login,authenticate,logout
+from django.contrib.auth.hashers import check_password
 
-from django.shortcuts import render, HttpResponse, redirect
-from django.contrib.auth.hashers import make_password, check_password
-from .models import participants,organizer,gdg
+def sign_up(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            
+         
+            if UserType.objects.filter(email=email).exists():
+                messages.error(request, "Email is already taken!")
+                return redirect('sign_up')  
 
-def HomePage(request):
-    if 'user_id' not in request.session:
-        return redirect('LoginPage')  
+          
+            request.session['username'] = form.cleaned_data['name']
+            request.session['email'] = form.cleaned_data['email']
+            request.session['password'] = form.cleaned_data['password']
+            request.session['user_type'] = form.cleaned_data['user_type']
+            
+            
+            user = form.save(commit=False)
+            user.save()
 
-    user_id = request.session['user_id']
-    role = request.session.get('role')
-    is_org=False
-    if(role == 'Participant'):
-      user = participants.objects.get(id=user_id)  
+            messages.success(request, "Sign up successful! You can now log in.")
+            return redirect('user_login')  
     else:
-        user = organizer.objects.get(id=user_id)
-        is_org=True  
+        form = SignUpForm()
 
-    return render(request, "home.html", {'uname': user.name,'is_org':is_org})  
+    return render(request, 'sign.html', {'form': form})
 
-def SignupPage(request):
+
+
+
+def home(request):
+    clubs = club.objects.all()
+    events = event.objects.all() 
+    is_org=False 
+    print(request.session.get('user_type', ''))
+    if request.session.get('user_type', '') == 'organizer':
+        is_org=True
+    return render(request, 'home.html',{'events':events , 'is_org':is_org,'clubs':clubs})
+
+
+
+
+def user_login(request):
     if request.method == 'POST':
-        name = request.POST.get('uname')
-        email = request.POST.get('emailid')
-        passw = request.POST.get('pass')
-        role = request.POST.get('role')
-        
-        if(role=='Participant'):
-          
-          if participants.objects.filter(name=name).exists():
-            return HttpResponse("Username already exists! Try a different one.")
-          hashed_password = make_password(passw)
-          participant = participants.objects.create(name=name, email=email, password=hashed_password)
-          participant.save()
+        form = LoginForm(request.POST)
+
+        if form.is_valid():
+            
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+
+            try:
+               
+                user = UserType.objects.get(name=username) 
+                
+                if check_password(password, user.password):
+                     
+                    messages.success(request, "Logged in successfully!")
+                    request.session['username'] = form.cleaned_data['username']
+                    request.session['user_type'] = user.user_type
+                    name=user.name
+                    return redirect('home')
+                else:
+                    messages.error(request, "Invalid credentials. Please try again.")
+            except UserType.DoesNotExist:
+                messages.error(request, "User does not exist. Please sign up.")
+
         else:
-            if organizer.objects.filter(name=name).exists():
-                return HttpResponse("Username already exists! Try a different one.")
-            hashed_password = make_password(passw)
-            org = organizer.objects.create(name=name,email=email,password=hashed_password)
-            org.save()
-        return redirect('LoginPage')  
+            print(form.errors)  
 
-    return render(request, "signup.html")
-def LoginPage(request):
+        return redirect('user_login')
+
+    else:
+        form = LoginForm()
+
+    return render(request, 'login.html', {'form': form})
+
+
+def create_club(request):
+    form = ClubForm() 
+    if request.method =='POST':
+     form = ClubForm(request.POST)
+     if form.is_valid():
+         club = form.save(commit=False)
+         uname=request.session.get('username', '') 
+         username = UserType.objects.get(name=uname)
+         club.org_name = username
+         club.save()
+         return redirect('home')
+     else:
+         form=ClubForm()
+    return render(request, 'club.html', {'form': form})
+
+
+
+def create_event(request):
+    uname = request.session.get('username', '') 
+    try:
+        user_type = UserType.objects.get(name=uname)  
+    except UserType.DoesNotExist:
+        user_type = None
+
+    clubs = club.objects.filter(org_name=user_type) if user_type else club.objects.none()
+    
+    form = eventform(clubs=clubs)  
+
     if request.method == 'POST':
-        name = request.POST.get('uname')  
-        password = request.POST.get('pass') 
-        try:
-            user = organizer.objects.get(name=name)
-            if check_password(password, user.password):
-                request.session['user_id'] = user.id  
-                request.session['username'] = user.name
-                request.session['role'] = 'Organizer' 
-                return redirect("HomePage")
-        except organizer.DoesNotExist:
-            pass 
+        form = eventform(request.POST, clubs=clubs)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
 
-
-        try:
-            user = participants.objects.get(name=name)
-            if check_password(password, user.password):
-                request.session['user_id'] = user.id  
-                request.session['username'] = user.name
-                request.session['role'] = 'Participant' 
-                return redirect("HomePage")
-        except participants.DoesNotExist:
-            return HttpResponse("Invalid username or password")
-
-    return render(request, "login.html")
+    return render(request, 'event.html', {'form': form})
 
 
 
-def logoutv(request):
-    request.session.flush()
-    return redirect('LoginPage')
 
- 
-
-def service(request):
-    return render(request, "service.html")
-
-def about(request):
-    return render(request, "about.html")
-
-def contact(request):
-    return render(request, "contact.html")
-
-def createeventform(request):
+def register_for_event(request, event_id):
+    
+    current_event = get_object_or_404(event, id=event_id)
+    
     if request.method == 'POST':
-        event_name = request.POST.get('event_name')
-        email = request.POST.get('email')
-        contactno = request.POST.get('contactno')
-        date = request.POST.get('date')
-        starttime = request.POST.get('starttime')
-        endtime = request.POST.get('endtime')
-        location = request.POST.get('location')
-        desc=request.POST.get('desc')
-        event_img=request.POST.get('event_img')
-        purpose=request.POST.get('Purpose_of_event')
-          
-        if gdg.objects.filter(event_name=event_name).exists():
-            return HttpResponse("event already exists! Try a different one.")
-        event = gdg.objects.create(event_name=event_name,location=location,date=date,starttime=starttime,endtime=endtime,desc=desc,purpose_of_even=purpose,event_img=event_img,conact=contactno)
-        event.save()
-       
-        return redirect('HomePage')  
+        form = EventRegForm(request.POST)
+        
+        if form.is_valid():
+            form.instance.event_name = current_event
+            form.save()
+            return redirect('home')
+    else:
+        form = EventRegForm()
 
-    return render(request, "createevent.html")
+    return render(request, 'event_register.html', {'form': form, 'event': current_event})
