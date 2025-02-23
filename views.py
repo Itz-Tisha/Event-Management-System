@@ -1,9 +1,10 @@
 from django.shortcuts import render, HttpResponse, redirect,get_object_or_404
 from django.contrib import messages
-from .models import UserType,club,event
+from .models import UserType,club,event,event_reg
 from .forms import SignUpForm,LoginForm,ClubForm,eventform,EventRegForm
 from django . contrib.auth import login,authenticate,logout
 from django.contrib.auth.hashers import check_password
+from django.db.models import F
 
 def sign_up(request):
     if request.method == 'POST':
@@ -122,19 +123,38 @@ def create_event(request):
     return render(request, 'event.html', {'form': form})
 
 
-
-
 def register_for_event(request, event_id):
-    
     current_event = get_object_or_404(event, id=event_id)
-    
+
     if request.method == 'POST':
         form = EventRegForm(request.POST)
-        
+
         if form.is_valid():
+            email = form.cleaned_data['email']  
+            name = form.cleaned_data['name']
+          
+
+            session_email = request.session.get('email', '')
+            if email != session_email:
+                messages.error(request, 'Invalid email')
+                return render(request, 'event_register.html', {'form': form, 'event': current_event})
+            
+            if event_reg.objects.filter(email=email, event_name=current_event,name=name).exists():
+                messages.error(request, "You already registered for this event.")
+                return render(request, 'event_register.html', {'form': form, 'event': current_event})  
+
+            
+             
+           
             form.instance.event_name = current_event
             form.save()
+
+            
+            event.objects.filter(id=event_id).update(attendee=F('attendee') + 1)
+
+            messages.success(request, "Successfully registered for the event!")  
             return redirect('home')
+
     else:
         form = EventRegForm()
 
@@ -145,3 +165,6 @@ def club_events(request, clubname):
     events = event.objects.filter(club_name__clubname=clubname)
     
     return render(request, 'events.html', {'events': events})
+
+def edit_details(request):
+    return render(request,'edit_details.html')
