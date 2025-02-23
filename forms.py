@@ -49,7 +49,9 @@ class ClubForm(forms.ModelForm):
         widgets = {
             'clubname': forms.TextInput(attrs={'class': 'form-control'}),
             'desc': forms.Textarea(attrs={'class': 'form-control'}),
+           
         }
+
 
     def clean_clubname(self):  
         name = self.cleaned_data.get('clubname')
