@@ -120,7 +120,7 @@ def create_event(request):
             form.save()
             return redirect('home')
 
-    return render(request, 'event.html', {'form': form})
+    return render(request, 'event_create.html', {'form': form})
 
 
 def register_for_event(request, event_id):
