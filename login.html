@@ -96,7 +96,7 @@
         <form method="post">
             {% csrf_token %}
             
-            <!-- Username Field -->
+           
             <div class="form-group">
                 <label for="id_username">Username</label>
                 {{ form.username }}
@@ -109,7 +109,7 @@
                 {% endif %}
             </div>
 
-            <!-- Password Field -->
+         
             <div class="form-group">
                 <label for="id_password">Password</label>
                 {{ form.password }}
@@ -122,7 +122,7 @@
                 {% endif %}
             </div>
 
-            <!-- Submit Button -->
+         
             <button type="submit">Login</button>
         </form>
 
