@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,7 +64,9 @@
             list-style: none;
             gap: 15px;
         }
-
+        a{
+            text-decoration: none;
+        }
         ul li {
             padding: 5px 10px;
             cursor: pointer;
@@ -76,11 +80,7 @@
             color: white;
            
         }
-        /*.sec1 .img1 img{
-            margin-top: 26px;
-            height: 300px;
-            width: 620px;
-        }*/
+      
         .img1{
             display: flex;
         }
@@ -298,8 +298,8 @@
             height: 60px;
         }
         footer {
-            background-color: #1F2A3B; /* Dark blue-gray background for professionalism */
-            color: #ecf0f1; /* Light text color for contrast */
+            background-color: #1F2A3B;
+            color: #ecf0f1; 
             padding: 40px 0;
             text-align: center;
         }
@@ -336,7 +336,7 @@
         }
 
         footer .social-media a:hover {
-            color: #3498db; /* Blue color on hover */
+            color: #3498db;
         }
 
         footer .form-container {
@@ -351,13 +351,13 @@
             margin: 0 auto;
             padding: 10px;
             border-radius: 5px;
-            background-color: #34495e; /* Slightly lighter background for the form */
+            background-color: #34495e; 
         }
 
         footer form input[type="email"] {
             padding: 10px;
             width: 75%;
-            border: 1px solid #bdc3c7; /* Light border color */
+            border: 1px solid #bdc3c7; 
             border-radius: 5px;
             font-size: 1em;
             margin-right: 10px;
@@ -367,7 +367,7 @@
         footer form input[type="submit"] {
             padding: 10px 20px;
             font-size: 1em;
-            background-color: #3498db; /* Blue background for the button */
+            background-color: #3498db; 
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -376,7 +376,7 @@
         }
 
         footer form input[type="submit"]:hover {
-            background-color: #2980b9; /* Darker blue on hover */
+            background-color: #2980b9; 
         }
     </style>
 </head>
@@ -387,12 +387,12 @@
             <h1>Logo</h1>
         </div>
         <div class="menu">
+           
             <div class="mode" id="darkModeToggle">
-                <h4>Dark Mode</h4>
-               
-            </div>
-            <div class="mode" id="darkModeToggle">
-                <h4>Welcome {{ username }}</h4>
+
+                <a href="{% url 'edit_details' %}">
+                <h4>Welcome  {{ username }}</h4>
+                </a>
                
             </div>
             <button class="menubar" id="menuToggle">☰</button>
@@ -411,8 +411,6 @@
         </div>
     </nav>
 
-    
-       
             <div class="sec1">
                 
                 <div class="cont">
@@ -423,40 +421,35 @@
                 </div>
                 <div class="img1">
                     <div class="uprow">
-                        <img id="imgone" src="https://media.istockphoto.com/id/499517325/photo/a-man-speaking-at-a-business-conference.jpg?s=612x612&w=0&k=20&c=gWTTDs_Hl6AEGOunoQ2LsjrcTJkknf9G8BGqsywyEtE=">
-                        <br><img id="imgtwo" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBtRNDRWRBmgg1XQUzo2U9c2RQRSx8u3De8g&s">
+                        <img id="imgone" src="img1.jpeg">
+                        <br><img id="imgtwo" src="img2.jpeg">
                     </div>
                     <div class="dowrow">
-                        <img id="imgthree" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBtRNDRWRBmgg1XQUzo2U9c2RQRSx8u3De8g&s">
-                      <br>  <img id="imgfour" src="https://media.istockphoto.com/id/499517325/photo/a-man-speaking-at-a-business-conference.jpg?s=612x612&w=0&k=20&c=gWTTDs_Hl6AEGOunoQ2LsjrcTJkknf9G8BGqsywyEtE=">
+                        <img id="imgthree" src="img3.jpeg">
+                      <br>  <img id="imgfour" src="img4.jpeg">
                     </div>
                    
                 </div>
             </div>
-<br><br><br><br><br><br>
+            <br><br><br>
                 
   
 <div class="card-container">
     
-{% if clubs %}
+    {% if clubs %}
 
 
    {% for club in clubs %}
     
         <div class="card">
-            <img src="https://www.brandium.nl/wp-content/uploads/2023/07/arrow-br.svg">
+            <img src="imgs.png">
             <div class="card-content">
-                <h1 style="color: aqua;">{{ club.clubname }}</h1>
+                <h1>{{ club.clubname }}</h1>
                 <p>{{ club.desc }}</p>
                 <a href="{% url 'club_events' club.clubname %}">View Events</a>
             </div>
         </div>
        
-
-
-
-
-
         {% endfor %}
         {% else %}
         <p>No events created yet.</p>
@@ -498,13 +491,13 @@
     </div>
     <footer>
         <div class="container">
-            <!-- Contributors Section -->
+           
             <div class="contributors">
                 <h3>Contributors</h3>
-                <p>John Doe | Jane Smith</p>
+                <p>Preya | Tisha</p>
             </div>
     
-            <!-- Social Media Links -->
+      
             <div class="social-media">
                 <a href="https://www.facebook.com" target="_blank">Facebook</a>
                 <a href="https://www.twitter.com" target="_blank">Twitter</a>
@@ -512,7 +505,7 @@
                 <a href="https://www.instagram.com" target="_blank">Instagram</a>
             </div>
     
-            <!-- Form Section -->
+       
             <div class="form-container">
                 <h3>Stay Updated</h3><br>
                 <form action="#" method="POST">
@@ -527,27 +520,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js" integrity="sha512-onMTRKJBKz8M1TnqqDuGBlowlH0ohFzMXYRNebz+yOcc5TQr/zAKsthzhuv0hiyUKEiQEQXEynnXCvNTOk50dg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>
      
-        const menuToggle = document.getElementById("menuToggle");
-        const navMenu = document.getElementById("navMenu");
-    
-        menuToggle.addEventListener("click", () => {
-            navMenu.classList.toggle("show");
-        });
-    
-        
-        const darkModeToggle = document.getElementById("darkModeToggle");
-        const body = document.body;
-    
-        darkModeToggle.addEventListener("click", () => {
-            body.classList.toggle("dark");
-            if (body.classList.contains("dark")) {
-                body.style.background = "#E6E6FA";
-                body.style.color = "4B0082";
-            } else {
-                body.style.background = "#000";
-                body.style.color = "4B0082";
-            }
-        });
+
          
     window.addEventListener("wheel",function(dets){
     if(dets.deltaY>0){
