@@ -7,7 +7,7 @@ class UserType(models.Model):
         ('participant', 'Participant'),
     ]
     
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,unique=True)
     email = models.EmailField(max_length=100, unique=True)  
     password = models.CharField(max_length=255) 
     user_type = models.CharField(max_length=20, choices=USER_TYPES)
@@ -20,6 +20,7 @@ class club(models.Model):
     clubname=models.CharField(max_length=20,unique=True)
     desc = models.CharField(max_length=50)
     org_name = models.ForeignKey(UserType,on_delete=models.CASCADE,blank=True,null=True)
+   
     def __str__(self):
         return f"{self.clubname} (Organizer: {self.org_name})"
     
@@ -31,6 +32,7 @@ class event(models.Model):
     date = models.DateField()
     desc = models.CharField(max_length=50)
     club_name = models.ForeignKey(club,on_delete=models.CASCADE)
+    attendee = models.IntegerField(default=0)
 
 
 class event_reg(models.Model):
