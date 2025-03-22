@@ -1,10 +1,12 @@
 from django.shortcuts import render, HttpResponse, redirect,get_object_or_404
 from django.contrib import messages
-from .models import UserType,club,event,event_reg
-from .forms import SignUpForm,LoginForm,ClubForm,eventform,EventRegForm
+from .models import UserType,club,event,event_reg,feedback
+from .forms import SignUpForm,LoginForm,ClubForm,eventform,EventRegForm,feedbackform
 from django . contrib.auth import login,authenticate,logout
 from django.contrib.auth.hashers import check_password
 from django.db.models import F
+from datetime import datetime
+from django.utils import timezone
 
 def sign_up(request):
     if request.method == 'POST':
@@ -46,8 +48,6 @@ def home(request):
     if request.session.get('user_type', '') == 'organizer':
         is_org=True
     return render(request, 'home.html',{'events':events , 'is_org':is_org,'clubs':clubs,'username':username})
-
-
 
 
 def user_login(request):
@@ -125,20 +125,25 @@ def create_event(request):
 
 def register_for_event(request, event_id):
     current_event = get_object_or_404(event, id=event_id)
-
+    clubname = current_event.club_name
+    org_email = clubname.org_name.email
     if request.method == 'POST':
         form = EventRegForm(request.POST)
 
         if form.is_valid():
             email = form.cleaned_data['email']  
             name = form.cleaned_data['name']
-          
+            
 
             session_email = request.session.get('email', '')
             if email != session_email:
                 messages.error(request, 'Invalid email')
                 return render(request, 'event_register.html', {'form': form, 'event': current_event})
             
+            if email == org_email:
+                messages.error(request, 'You can not register for event....')
+                return render(request, 'event_register.html', {'form': form, 'event': current_event})
+                
             if event_reg.objects.filter(email=email, event_name=current_event,name=name).exists():
                 messages.error(request, "You already registered for this event.")
                 return render(request, 'event_register.html', {'form': form, 'event': current_event})  
@@ -163,8 +168,37 @@ def register_for_event(request, event_id):
 def club_events(request, clubname):
    
     events = event.objects.filter(club_name__clubname=clubname)
-    
-    return render(request, 'events.html', {'events': events})
+    current_time = timezone.now()
+    return render(request, 'events.html', {'events': events , 'current_time': current_time})
 
 def edit_details(request):
     return render(request,'edit_details.html')
+
+
+
+def logoutv(request):
+    request.session.flush()
+    return redirect('user_login')
+
+def give_Feedback(request,event_id):
+    current_event = get_object_or_404(event, id=event_id)
+    if request.method == 'POST':
+        form = feedbackform(request.POST)
+
+        if form.is_valid():
+            form.instance.event_name = current_event
+            form.save()
+            messages.success(request, "Your feedback stored successfully!")  
+            return redirect('home')
+
+    else:
+        form = feedbackform()
+
+    return render(request, 'form.html', {'form': form, 'event': current_event})
+
+def view_Feedback(request,event_id):
+    event_name = get_object_or_404(event, id=event_id)
+    reviews = feedback.objects.filter(event_name = event_name)
+    print(reviews)
+    return render(request, 'review.html', {'reviews': reviews })
+    
