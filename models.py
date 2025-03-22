@@ -36,7 +36,11 @@ class event(models.Model):
 
 
 class event_reg(models.Model):
-    name = models.CharField(max_length=20)
-    email = models.EmailField(max_length=20,unique=True)
+    name = models.CharField(max_length=80)
+    email = models.EmailField(max_length=80,unique=True)
     event_name = models.ForeignKey(event,on_delete=models.CASCADE)
 
+class feedback(models.Model):
+    name = models.CharField(max_length=50)
+    feedback = models.CharField(max_length=100)
+    event_name = models.ForeignKey(event,on_delete=models.CASCADE)
