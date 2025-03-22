@@ -20,7 +20,7 @@
             flex-direction: column;
             min-height: 100vh;
             background: #081b29;
-            overflow: hidden;
+            overflow-y: auto;
             padding: 20px;
         }
         .event-card {
@@ -75,9 +75,22 @@
                 <h2>{{ event.event_name }}</h2>
                 <p>description : {{ event.desc }}</p>
                 <p> Attendees : {{ event.attendee }}</p>
+                <p> Start Time : {{ event.start_time }}</p>
+                <p> End Time : {{ event.end_time }}</p>
+                <p> Date : {{ event.date }}</p>
+                <p> Location : {{ event.location }}</p>
                 <a href="{% url 'register_for_event' event.id %}">
                     <button type="button">Register</button>
                 </a>
+                <br></br>
+                {% if event.date < current_time.date%}
+                <a href="{% url 'give_Feedback' event.id %}">
+                    <button type="button">Give Feedback</button>
+                </a>
+                <a href="{% url 'view_Feedback' event.id %}">
+                    <button type="button">View Feedback</button>
+                </a>
+                    {% endif %}
             </div>
         {% endfor %}
     {% else %}
