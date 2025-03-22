@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -398,14 +396,19 @@
             <button class="menubar" id="menuToggle">☰</button>
             <ul id="navMenu">
                
-                
+                <a href="{% url 'user_login' %}">
+                    <button type="button" style="font-size: 14px;"> Logout</button>
+                </a>
                             {% if is_org %}
                 <a href="{% url 'create_club' %}">
-                    <button type="button">Club Create</button>
+                    <button type="button" style="font-size: 14px;"> Create Club</button>
                 </a>
                 <a href="{% url 'create_event' %}">
-                    <button type="button">Event Create</button>
+                    <button type="button" style="font-size: 14px;">Create Event</button>
                 </a>
+                
+
+
                 {% endif %}
             </ul>
         </div>
@@ -421,12 +424,12 @@
                 </div>
                 <div class="img1">
                     <div class="uprow">
-                        <img id="imgone" src="img1.jpeg">
-                        <br><img id="imgtwo" src="img2.jpeg">
+                        <img id="imgone" src="https://archprinting.pk/wp-content/uploads/elementor/thumbs/Presentation-Poster-print-scaled-qukhsa0t3vwmo154yp5zormk0ymrm9i5g07llzc2fa.jpg">
+                        <br><img id="imgtwo" src="https://www.nordicinnovation.org/sites/default/files/styles/featured/public/2023-10/workshop.jpg?h=c673cd1c&itok=Zmd7tInX">
                     </div>
                     <div class="dowrow">
-                        <img id="imgthree" src="img3.jpeg">
-                      <br>  <img id="imgfour" src="img4.jpeg">
+                        <img id="imgthree" src="https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcTGFhNdT4ohv-220hwrLY6APNwRZeSBhXnWT1CPNrRkww73hyy-">
+                      <br>  <img id="imgfour" src="https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQdnm5xsi1Cp-FBcIdAkoe1mGx3hPgDEn1t1mSKmULy5cTcx06r">
                     </div>
                    
                 </div>
@@ -442,7 +445,7 @@
    {% for club in clubs %}
     
         <div class="card">
-            <img src="imgs.png">
+            <img src="https://www.clipartbest.com/cliparts/bcy/xKo/bcyxKojqi.png">
             <div class="card-content">
                 <h1>{{ club.clubname }}</h1>
                 <p>{{ club.desc }}</p>
@@ -549,4 +552,4 @@
     </script>
     
     </body>
-    </html>
+</html>
