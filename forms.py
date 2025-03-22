@@ -2,7 +2,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import AuthenticationForm
-from .models import UserType,event_reg,club,event
+from .models import UserType,event_reg,club,event,feedback
 from django.core.exceptions import ValidationError
 from django.contrib.auth.hashers import make_password
 
@@ -88,3 +88,11 @@ class EventRegForm(forms.ModelForm):
     class Meta:
         model = event_reg
         fields = ['name', 'email']  
+
+class feedbackform(forms.ModelForm):
+    class Meta:
+        model = feedback
+        fields = ['name' , 'feedback']
+    
+    def __str__(self):
+        return f"Feedback by {self.name} for {self.event_name.event_name}"
